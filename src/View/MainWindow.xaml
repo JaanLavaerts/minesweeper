@@ -1,0 +1,56 @@
+﻿<Window x:Class="View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:View"
+        xmlns:converters="clr-namespace:View.Converters"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="600">
+    <Window.Resources>
+        <converters:SquareStatusConverter x:Key="squareStatusToEllipseFill" Flagged="Orange" Covered="Transparent" Mine="Black" Uncovered="Transparent" />
+        <converters:SquareStatusConverter x:Key="squareStatusToLabelVisibility" Flagged="Hidden" Covered="Hidden" Mine="Visible" Uncovered="Visible" />
+    </Window.Resources>
+
+    <StackPanel>
+        <TextBlock Text="Minesweeper" HorizontalAlignment="Center" Margin="5" FontSize="24"></TextBlock>
+        <Viewbox Stretch="Fill" MaxWidth="500" MaxHeight="500">
+            <Grid>
+                <ItemsControl ItemsSource="{Binding GameBoard.Rows}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding Squares}">
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button>
+                                            <Button.InputBindings>
+                                                <MouseBinding Gesture="LeftClick" Command="{Binding Uncover}" />
+                                                <MouseBinding Gesture="RightClick" Command="{Binding Flag}" />
+                                            </Button.InputBindings>
+                                            <Grid>
+                                                <Ellipse Width="32" Height="32" Fill="{Binding Square.Value.Status, Converter={StaticResource squareStatusToEllipseFill}}" />
+                                                <TextBlock Text="{Binding Square.Value}" Visibility="{Binding Square.Value.Status, Converter={StaticResource squareStatusToLabelVisibility}}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                </TextBlock>
+                                            </Grid>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"></StackPanel>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+
+                            </ItemsControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+            </Grid>
+        </Viewbox>
+
+    </StackPanel>
+    
+</Window>
